@@ -8,5 +8,9 @@ use world::World;
 fn main() {
     let mut world = World::new(1000.0, 1000.0);
 
-    world.populate_microbes(100);
+    world.populate_microbes(5);
+
+    for microbe in world.microbes {
+        println!("{}\n\n", microbe);
+    }
 }

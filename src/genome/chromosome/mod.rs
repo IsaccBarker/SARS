@@ -5,6 +5,8 @@ use crate::genome::chromosome::base_pair::BasePair;
 use crate::genome::chromosome::gene::Gene;
 
 use std::collections::HashMap;
+use std::fmt;
+use rand::rngs::ThreadRng;
 
 /// The type of chromosome.
 /// 1. Resistant. Antibiotic resistance outside the cell.
@@ -38,16 +40,28 @@ pub struct Chromosome {
     pub genes: HashMap<String, Gene>,
 }
 
-impl Chromosome {
-    pub fn new(for_type: ChromosomeType) -> Self {
-        let genes = match for_type {
-            ChromosomeType::Resistant => gene::random_resistant_genes(),
-            ChromosomeType::Neuronal => gene::random_neuronal_genes(),
-            ChromosomeType::External => gene::random_external_genes(),
-        };
+impl fmt::Display for Chromosome {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        for (k, v) in &self.genes {
+            write!(f, "\n\t\t{}: {}", k, v)?;
+        }
 
+        write!(f, "")
+    }
+}
+
+impl Chromosome {
+    pub fn new() -> Self {
         Self {
-            genes,
+            genes: HashMap::new(),
+        }
+    }
+
+    pub fn randomize(&mut self, for_type: ChromosomeType, rng: &mut ThreadRng) {
+        self.genes = match for_type {
+            ChromosomeType::Resistant => gene::random_resistant_genes(rng),
+            ChromosomeType::Neuronal => gene::random_neuronal_genes(rng),
+            ChromosomeType::External => gene::random_external_genes(rng),
         }
     }
 

@@ -2,6 +2,7 @@ use crate::position::Position;
 use crate::world::World;
 use crate::genome::Genome;
 
+use std::fmt;
 use rand::prelude::*;
 use rand::rngs::ThreadRng;
 
@@ -9,6 +10,12 @@ use rand::rngs::ThreadRng;
 pub struct Microbe {
     pub position: Position,
     pub genome: Genome,
+}
+
+impl fmt::Display for Microbe {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Position:\n\t{:?}\nGenome:\n{}", self.position, self.genome)
+    }
 }
 
 impl Microbe {
@@ -39,7 +46,7 @@ impl Microbe {
 
     #[allow(unused_variables)]
     fn randomize_genome(self: &mut Self, rng: &mut ThreadRng) {
-        // unimplemented!();
+        self.genome.randomize(rng);
     }
 }
 

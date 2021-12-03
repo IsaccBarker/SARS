@@ -2,6 +2,7 @@ use crate::microbe::Microbe;
 
 use rand::prelude::*;
 
+#[derive(Debug)]
 pub struct World {
     pub microbes: Vec<Microbe>,
     pub x_bound: f32,
