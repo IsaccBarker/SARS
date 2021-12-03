@@ -1,3 +1,4 @@
+pub mod nucleobase;
 pub mod base_pair;
 pub mod gene;
 

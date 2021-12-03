@@ -1,35 +1,8 @@
 use std::fmt;
 
-use rand::Rng;
+use super::nucleobase::Nucleobase;
+
 use rand::rngs::ThreadRng;
-
-/// Self explanitory.
-#[derive(Debug)]
-pub enum Nucleobase {
-    A,
-    C,
-    T,
-    G,
-    NYA,
-}
-
-impl fmt::Display for Nucleobase {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self)
-    }
-}
-
-impl Nucleobase {
-    pub fn random_acid(rng: &mut ThreadRng) -> Nucleobase {
-        match rng.gen_range(0..4) { // rand 0.8
-            0 => Nucleobase::A,
-            1 => Nucleobase::C,
-            2 => Nucleobase::T,
-            3 => Nucleobase::G,
-            _ => unreachable!(),
-        }
-    }
-}
 
 /// Self explanitory.
 #[derive(Debug)]
@@ -74,15 +47,5 @@ impl BasePair {
 
         ret
     }
-
-    /* pub fn pairs_to_base_pairs(pairs: Vec<Self>) -> Vec<BasePair> {
-        let mut ret: Vec<BasePair> = Vec::new();
-
-        for pair in pairs {
-            ret.push(BasePair::from_existing(pair));
-        }
-
-        ret
-    } */
 }
 
