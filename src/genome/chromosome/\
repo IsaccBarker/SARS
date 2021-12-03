@@ -1,0 +1,14 @@
+use crate::genome::chromosome::BasePair;
+
+pub struct Gene {
+    pairs: Vec<BasePair>,
+}
+
+impl Gene {
+    pub fn new() -> Self {
+        Self {
+            pairs: vec![],
+        }
+    }
+}
+

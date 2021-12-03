@@ -2,6 +2,7 @@ pub mod ecdna;
 pub mod chromosome;
 
 use chromosome::Chromosome;
+use chromosome::ChromosomeType;
 
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
@@ -17,9 +18,9 @@ impl Genome {
     /// Creates a new genome.
     pub fn new() -> Self {
         Self {
-            resistant_chromosome: Chromosome::new(),
-            neuronal_chromosome: Chromosome::new(),
-            external_chromosome: Chromosome::new(),
+            resistant_chromosome: Chromosome::new(ChromosomeType::Resistant),
+            neuronal_chromosome: Chromosome::new(ChromosomeType::Neuronal),
+            external_chromosome: Chromosome::new(ChromosomeType::External),
         }
     }
 }
