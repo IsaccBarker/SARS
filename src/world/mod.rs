@@ -3,14 +3,14 @@ use crate::microbe::Microbe;
 use rand::prelude::*;
 
 #[derive(Debug)]
-pub struct World {
-    pub microbes: Vec<Microbe>,
+pub struct World<'a> {
+    pub microbes: Vec<Microbe<'a>>,
     pub x_bound: f32,
     pub y_bound: f32,
     pub rng: rand::rngs::ThreadRng,
 }
 
-impl World {
+impl<'a> World<'a> {
     pub fn new(x_bound: f32, y_bound: f32) -> Self {
         Self {
             microbes: vec![],
@@ -31,6 +31,13 @@ impl World {
             self.microbes.push(microbe);
 
             i = i + 1;
+        }
+    }
+
+    #[allow(unused_variables, unused_mut)]
+    pub fn tick(self: &mut Self, rng: &ThreadRng) {
+        for microbe in &mut self.microbes {
+            microbe.tick();
         }
     }
 }

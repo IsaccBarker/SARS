@@ -10,7 +10,7 @@ use rand::rngs::ThreadRng;
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
 /// in coce. You can think of it as one anyways.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Genome {
     pub resistant_chromosome: Chromosome,
     pub neuronal_chromosome: Chromosome,
@@ -39,6 +39,16 @@ impl Genome {
         self.resistant_chromosome.randomize(ChromosomeType::Resistant, rng);
         self.neuronal_chromosome.randomize(ChromosomeType::Neuronal, rng);
         self.external_chromosome.randomize(ChromosomeType::External, rng);
+    }
+
+    pub fn mitos(self: &mut Self, mutation_chance: i32, rng: &mut ThreadRng) -> Self {
+        let mut ret = Genome::new();
+
+        ret.resistant_chromosome = self.resistant_chromosome.mitos(mutation_chance, rng);
+        ret.neuronal_chromosome = self.neuronal_chromosome.mitos(mutation_chance, rng);
+        ret.external_chromosome = self.external_chromosome.mitos(mutation_chance, rng);
+
+        ret
     }
 }
 

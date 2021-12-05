@@ -4,7 +4,7 @@ use rand::prelude::*;
 use std::fmt;
 
 /// Self explanitory.
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Nucleobase {
     A,
     C,

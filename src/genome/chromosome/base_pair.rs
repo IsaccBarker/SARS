@@ -5,7 +5,7 @@ use super::nucleobase::Nucleobase;
 use rand::rngs::ThreadRng;
 
 /// Self explanitory.
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BasePair {
     pub a: Nucleobase,
     pub b: Nucleobase,
