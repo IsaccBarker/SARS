@@ -44,15 +44,8 @@ pub fn random_external_genes(rng: &mut ThreadRng) -> BTreeMap<String, Gene> {
     // Should we wrap around a color that is too big?
     genes.insert("EG-COLW-1".to_owned(), Gene::from_existing(vec![BasePair::random_base_pair(rng)]));
 
-    // The higher the speed, the faster the microbe can move, but
-    // motabalism increases.
-
-    // Forward
-    genes.insert("EG-SPD-F".to_owned(), Gene::from_existing(BasePair::random_base_pairs(2, rng)));
-    // Backward
-    genes.insert("EG-SPD-B".to_owned(), Gene::from_existing(BasePair::random_base_pairs(2, rng)));
-    // Side
-    genes.insert("EG-SPD-S".to_owned(), Gene::from_existing(BasePair::random_base_pairs(2, rng)));
+    // Speed of the organism.
+    genes.insert("EG-SPD-A".to_owned(), Gene::from_existing(BasePair::random_base_pairs(2, rng)));
 
     // Capsule present
     genes.insert("EG-CAP-P".to_owned(), Gene::from_existing(vec![BasePair::random_base_pair(rng)]));

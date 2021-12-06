@@ -1,36 +1,31 @@
 use crate::position::Position;
 use crate::world::World;
 use crate::genome::Genome;
-use crate::neural::NeuralNetwork;
 
 use std::fmt;
 use rand::prelude::*;
 use rand::rngs::ThreadRng;
 
 #[derive(Debug, PartialEq)]
-pub struct Microbe<'a> {
+pub struct Microbe {
+    pub orientation: f64,
+    pub speed: f64,
     pub position: Position,
-    pub neural: NeuralNetwork<'a>,
     pub genome: Genome,
 }
 
-impl<'a> fmt::Display for Microbe<'a> {
+impl fmt::Display for Microbe {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Position:\n\t{:?}\nNeural:\n{}\nGenome:\n{}", self.position, self.neural, self.genome)
+        write!(f, "Position:\n\t{:?}\nGenome:\n{}", self.position, self.genome)
     }
 }
 
-impl<'a> Microbe<'a> {
+impl Microbe {
     pub fn new() -> Self {
-        let mut neural = NeuralNetwork::new();
-        neural.export_outputs(vec![
-            "speed".to_owned(),
-            "direction".to_owned(),
-        ]);
-
         Self {
+            orientation: 0.0,
+            speed: 0.0,
             position: Position::new(0.0, 0.0),
-            neural,
             genome: Genome::new(),
         }
     }
@@ -38,6 +33,18 @@ impl<'a> Microbe<'a> {
     pub fn randomize(self: &mut Self, world: &mut World) -> &mut Self {
         self.randomize_position(&mut world.rng, world.x_bound, world.y_bound);
         self.randomize_genome(&mut world.rng);
+
+        let genome = &self.genome;
+
+        let mut speed: f64 = 0.0;
+        let speed_gene = genome.external_chromosome.genes.get_key_value("EG-SPD-A").expect("EG-SPD-A gene not present!").1;
+        
+        speed += speed_gene.pairs.get(0).unwrap().a.value() as f64;
+        speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as f64;
+        speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as f64;
+        speed += (speed_gene.pairs.get(1).unwrap().b.value() * 16) as f64;
+
+        self.speed = speed;
 
         self
     }
@@ -53,18 +60,16 @@ impl<'a> Microbe<'a> {
         ret
     }
 
-    pub fn tick(self: &mut Self) {
-        self.neural.set_inputs(vec![
-            ("x".to_owned(), self.position.x.into()),
-            ("y".to_owned(), self.position.y.into()),
-        ]);
+    pub fn tick(self: &mut Self, rng: &mut ThreadRng) {
+        self.position.x += self.speed * self.orientation.cos();
+        self.position.y += self.speed * self.orientation.sin();
 
-        self.neural.process();
+        self.orientation = rng.gen_range(-10.0..10.0);
     }
 }
 
-impl<'a> Microbe<'a> {
-    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: f32, y_bound: f32) {
+impl Microbe {
+    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: f64, y_bound: f64) {
         self.position.x = rng.gen_range(-x_bound..x_bound);
         self.position.y = rng.gen_range(-y_bound..y_bound);
     }

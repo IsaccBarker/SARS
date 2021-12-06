@@ -13,14 +13,12 @@ use rand::rngs::ThreadRng;
 #[derive(Debug, PartialEq)]
 pub struct Genome {
     pub resistant_chromosome: Chromosome,
-    pub neuronal_chromosome: Chromosome,
     pub external_chromosome: Chromosome,
 }
 
 impl fmt::Display for Genome {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "\tResistant: {}\n", self.resistant_chromosome)?;
-        write!(f, "\tNeuronal : {}\n", self.neuronal_chromosome)?;
         write!(f, "\tExternal : {}\n", self.external_chromosome)
     }
 }
@@ -29,7 +27,6 @@ impl Genome {
     pub fn new() -> Self {
         Self {
             resistant_chromosome: Chromosome::new(),
-            neuronal_chromosome: Chromosome::new(),
             external_chromosome: Chromosome::new(),
         }
     }
@@ -37,7 +34,6 @@ impl Genome {
     /// Randomizes the genome (chromosomes)
     pub fn randomize(self: &mut Self, rng: &mut ThreadRng) {
         self.resistant_chromosome.randomize(ChromosomeType::Resistant, rng);
-        self.neuronal_chromosome.randomize(ChromosomeType::Neuronal, rng);
         self.external_chromosome.randomize(ChromosomeType::External, rng);
     }
 
@@ -45,7 +41,6 @@ impl Genome {
         let mut ret = Genome::new();
 
         ret.resistant_chromosome = self.resistant_chromosome.mitos(mutation_chance, rng);
-        ret.neuronal_chromosome = self.neuronal_chromosome.mitos(mutation_chance, rng);
         ret.external_chromosome = self.external_chromosome.mitos(mutation_chance, rng);
 
         ret

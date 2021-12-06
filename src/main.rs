@@ -1,7 +1,6 @@
 pub mod world;
 pub mod microbe;
 pub mod genome;
-pub mod neural;
 pub mod position;
 
 use world::World;
@@ -13,11 +12,11 @@ fn main() {
 
     let mut world = World::new(1000.0, 1000.0);
     let pb = ProgressBar::new(ticks.try_into().unwrap());
-    let rng = rand::thread_rng();
+    let mut rng = rand::thread_rng();
     
     world.populate_microbes(1000);
 
-    world.tick(&rng);
+    world.tick(&mut rng);
 
     println!("{}", world.microbes.get(0).unwrap());
 
@@ -30,10 +29,12 @@ fn main() {
     // number generator, they would end up executing in
     // sequence anyways.
     for i in 0..ticks {
-        world.tick(&rng);
+        world.tick(&mut rng);
 
         pb.set_position(i.try_into().unwrap());
         pb.set_message(format!("{}/{}", i, ticks));
+
+        pb.println(format!("{}", world.microbes.get(0).unwrap().position.x));
     }
 
      pb.finish_with_message("done");

@@ -29,4 +29,14 @@ impl Nucleobase {
             _ => unreachable!(),
         }
     }
+
+    pub fn value(&self) -> u8 {
+        match self {
+            Nucleobase::A => 0,
+            Nucleobase::C => 1,
+            Nucleobase::T => 2,
+            Nucleobase::G => 3,
+            _ => panic!("Unknown nucleobase {}!", self),
+        }
+    }
 }
