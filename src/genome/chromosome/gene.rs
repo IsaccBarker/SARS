@@ -3,8 +3,10 @@ use crate::genome::chromosome::nucleobase::Nucleobase;
 
 use std::collections::BTreeMap;
 use std::fmt;
+
 use rand::rngs::ThreadRng;
 use rand::Rng;
+use serde::{Serialize, Deserialize};
 
 pub fn random_resistant_genes(_rng: &ThreadRng) -> BTreeMap<String, Gene> {
     let genes = BTreeMap::new();
@@ -62,7 +64,7 @@ pub fn random_external_genes(rng: &mut ThreadRng) -> BTreeMap<String, Gene> {
 ///     (T, T) = (4, 4) = 4 + 4 = 8 (base 10) = 10 (base eight) = 20 (base eight)
 /// The output of each base pair is combined into a gene output in a
 /// specfic way, documented individually.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Gene {
     pub pairs: Vec<BasePair>,
 }

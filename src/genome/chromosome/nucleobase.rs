@@ -1,10 +1,11 @@
-use rand::rngs::ThreadRng;
-use rand::prelude::*;
-
 use std::fmt;
 
+use rand::rngs::ThreadRng;
+use rand::prelude::*;
+use serde::{Serialize, Deserialize};
+
 /// Self explanitory.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Nucleobase {
     A,
     C,

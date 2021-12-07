@@ -3,9 +3,10 @@ use std::fmt;
 use super::nucleobase::Nucleobase;
 
 use rand::rngs::ThreadRng;
+use serde::{Serialize, Deserialize};
 
 /// Self explanitory.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BasePair {
     pub a: Nucleobase,
     pub b: Nucleobase,

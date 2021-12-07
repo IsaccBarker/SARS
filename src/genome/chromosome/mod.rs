@@ -7,12 +7,15 @@ use crate::genome::chromosome::gene::Gene;
 
 use std::collections::BTreeMap;
 use std::fmt;
+
 use rand::rngs::ThreadRng;
+use serde::{Serialize, Deserialize};
 
 /// The type of chromosome.
 /// 1. Resistant. Antibiotic resistance outside the cell.
 /// 2. Neuronal. Neural network inside the cell.
 /// 3. External. Physical characteristics outside the cell.
+#[derive(Serialize, Deserialize)]
 pub enum ChromosomeType {
     Resistant,
     Neuronal,
@@ -22,7 +25,7 @@ pub enum ChromosomeType {
 /// This is not a regular chromosome (e.g. it's not a sequence
 /// of base pairs, but rather a description of the neural network
 /// and characteristics of the microbe).
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Chromosome {
     /// The base pairs that belong to the chromosome.
     /// Each gene is labeled with the String key,

@@ -3,13 +3,15 @@ use crate::world::World;
 use crate::genome::Genome;
 
 use std::fmt;
+
 use rand::prelude::*;
 use rand::rngs::ThreadRng;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Microbe {
-    pub orientation: f64,
-    pub speed: f64,
+    pub orientation: i128,
+    pub speed: i128,
     pub position: Position,
     pub genome: Genome,
 }
@@ -23,26 +25,28 @@ impl fmt::Display for Microbe {
 impl Microbe {
     pub fn new() -> Self {
         Self {
-            orientation: 0.0,
-            speed: 0.0,
-            position: Position::new(0.0, 0.0),
+            orientation: 0,
+            speed: 0,
+            position: Position::new(0, 0),
             genome: Genome::new(),
         }
     }
 
     pub fn randomize(self: &mut Self, world: &mut World) -> &mut Self {
-        self.randomize_position(&mut world.rng, world.x_bound, world.y_bound);
-        self.randomize_genome(&mut world.rng);
+        let mut rng = rand::thread_rng();
+
+        self.randomize_position(&mut rng, world.x_bound, world.y_bound);
+        self.randomize_genome(&mut rng);
 
         let genome = &self.genome;
 
-        let mut speed: f64 = 0.0;
+        let mut speed: i128 = 0;
         let speed_gene = genome.external_chromosome.genes.get_key_value("EG-SPD-A").expect("EG-SPD-A gene not present!").1;
         
-        speed += speed_gene.pairs.get(0).unwrap().a.value() as f64;
-        speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as f64;
-        speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as f64;
-        speed += (speed_gene.pairs.get(1).unwrap().b.value() * 16) as f64;
+        speed += speed_gene.pairs.get(0).unwrap().a.value() as i128;
+        speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as i128;
+        speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as i128;
+        speed += (speed_gene.pairs.get(1).unwrap().b.value() * 16) as i128;
 
         self.speed = speed;
 
@@ -60,16 +64,17 @@ impl Microbe {
         ret
     }
 
-    pub fn tick(self: &mut Self, rng: &mut ThreadRng) {
-        self.position.x += self.speed * self.orientation.cos();
-        self.position.y += self.speed * self.orientation.sin();
+    pub fn tick(self: &mut Self) {
+        let mut rng = rand::thread_rng();
 
-        self.orientation = rng.gen_range(-10.0..10.0);
+        self.orientation += rng.gen_range(-1..2);
+        self.position.x += self.speed * f64::cos(self.orientation as f64) as i128;
+        self.position.y += self.speed * f64::sin(self.orientation as f64) as i128;
     }
 }
 
 impl Microbe {
-    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: f64, y_bound: f64) {
+    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: i128, y_bound: i128) {
         self.position.x = rng.gen_range(-x_bound..x_bound);
         self.position.y = rng.gen_range(-y_bound..y_bound);
     }

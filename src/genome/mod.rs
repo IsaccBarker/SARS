@@ -5,12 +5,14 @@ use chromosome::Chromosome;
 use chromosome::ChromosomeType;
 
 use std::fmt;
+
 use rand::rngs::ThreadRng;
+use serde::{Serialize, Deserialize};
 
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
 /// in coce. You can think of it as one anyways.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Genome {
     pub resistant_chromosome: Chromosome,
     pub external_chromosome: Chromosome,
