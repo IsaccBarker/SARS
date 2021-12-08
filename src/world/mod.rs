@@ -24,7 +24,7 @@ impl World {
         }
     }
 
-    pub fn populate_microbes(self: &mut Self, pb: ProgressBar, count: u32) {
+    pub fn populate_microbes(self: &mut Self, pb: &ProgressBar, count: u32) {
         let mut i: u32 = 0;
         let mut microbe;
 
@@ -37,7 +37,7 @@ impl World {
             self.microbes.push(microbe);
 
             pb.inc(1);
-            pb.set_message(format!("{}/{}", i, count));
+            pb.set_message(format!("instance {}/{}", i, count));
 
             i = i + 1;
         }
