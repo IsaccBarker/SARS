@@ -10,8 +10,8 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Microbe {
-    pub orientation: i128,
-    pub speed: i128,
+    pub orientation: i32,
+    pub speed: i32,
     pub position: Position,
     pub genome: Genome,
 }
@@ -40,13 +40,13 @@ impl Microbe {
 
         let genome = &self.genome;
 
-        let mut speed: i128 = 0;
+        let mut speed: i32 = 0;
         let speed_gene = genome.external_chromosome.genes.get_key_value("EG-SPD-A").expect("EG-SPD-A gene not present!").1;
         
-        speed += speed_gene.pairs.get(0).unwrap().a.value() as i128;
-        speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as i128;
-        speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as i128;
-        speed += (speed_gene.pairs.get(1).unwrap().b.value() * 16) as i128;
+        speed += speed_gene.pairs.get(0).unwrap().a.value() as i32;
+        speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as i32;
+        speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as i32;
+        speed += (speed_gene.pairs.get(1).unwrap().b.value() * 16) as i32;
 
         self.speed = speed;
 
