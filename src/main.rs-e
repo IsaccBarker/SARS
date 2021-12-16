@@ -32,8 +32,8 @@ fn main() {
 
     let ticks: i32 = value_of_int_wrap!(opts.value_of("ticks"));
     let microbes: u32 = value_of_int_wrap!(opts.value_of("microbes"));
-    let world_width: u32 = value_of_int_wrap!(opts.value_of("width"));
-    let world_height: u32 = value_of_int_wrap!(opts.value_of("height"));
+    let world_width: u128 = value_of_int_wrap!(opts.value_of("width"));
+    let world_height: u128 = value_of_int_wrap!(opts.value_of("height"));
     let n_quads: usize = value_of_int_wrap!(opts.value_of("n_quads"));
 
     let mut world = World::new(world_width, world_height, n_quads);

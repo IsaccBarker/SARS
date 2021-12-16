@@ -11,15 +11,15 @@ pub struct World {
     pub quads: Vec<Quad>,
     pub n_quads: usize,
     pub cached_microbes: i32,
-    pub x_bound: u32,
-    pub y_bound: u32,
+    pub x_bound: u128,
+    pub y_bound: u128,
 }
 
 unsafe impl Send for World {}
 unsafe impl Sync for World {}
 
 impl World {
-    pub fn new(x_bound: u32, y_bound: u32, n_quads: usize) -> Self {
+    pub fn new(x_bound: u128, y_bound: u128, n_quads: usize) -> Self {
         let mut quads = Vec::new();
 
         for _ in 0..(n_quads^2) {
@@ -46,7 +46,7 @@ impl World {
 
             for quad in &self.quads {
                 // Detect the X position of the target quad.
-                let x = self.n_quads as u32 / microbe.position.x;
+                let x = self.n_quads as u128 / microbe.position.x;
 
                 // Detect the Y position of the target quad.
             }

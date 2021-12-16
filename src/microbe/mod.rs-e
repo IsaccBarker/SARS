@@ -68,8 +68,8 @@ impl Microbe {
         let mut rng = rand::thread_rng();
 
         self.orientation += rng.gen_range(-1..2);
-        self.position.x += self.speed as u32 * f64::cos(self.orientation as f64) as u32;
-        self.position.y += self.speed as u32 * f64::sin(self.orientation as f64) as u32;
+        self.position.x += self.speed as u128 * f64::cos(self.orientation as f64) as u128;
+        self.position.y += self.speed as u128 * f64::sin(self.orientation as f64) as u128;
 
         /* if self.position.x < 0 {
             self.position.x = 0;
@@ -82,7 +82,7 @@ impl Microbe {
 }
 
 impl Microbe {
-    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: u32, y_bound: u32) {
+    fn randomize_position(self: &mut Self, rng: &mut ThreadRng, x_bound: u128, y_bound: u128) {
         self.position.x = rng.gen_range(1..x_bound);
         self.position.y = rng.gen_range(1..y_bound);
     }
