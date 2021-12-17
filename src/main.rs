@@ -1,8 +1,6 @@
 pub mod world;
-pub mod quadtree;
 pub mod microbe;
 pub mod genome;
-pub mod position;
 
 use world::World;
 
@@ -17,26 +15,20 @@ macro_rules! value_of_int_wrap {
 }
 
 fn main() {
-    let opts = App::new("My Program")
+    let opts = App::new("SARS")
         .author("Me, me@mail.com")
         .version("1.0.2")
-        .about("Explains in brief what the program does")
+        .about("Simple Anti-microbial Resistance Simulator. I am aware of the acronym's irony.")
         .arg(Arg::with_name("ticks").short("t").default_value("100000"))
         .arg(Arg::with_name("microbes").short("m").default_value("100000"))
-        .arg(Arg::with_name("width").short("w").default_value("1000"))
-        .arg(Arg::with_name("height").short("h").default_value("1000"))
-        .arg(Arg::with_name("n_quads").short("q").default_value("100"))
         .after_help("Longer explanation to appear after the options when \
                  displaying the help information from --help or -h")
         .get_matches();
 
     let ticks: i32 = value_of_int_wrap!(opts.value_of("ticks"));
     let microbes: u32 = value_of_int_wrap!(opts.value_of("microbes"));
-    let world_width: u32 = value_of_int_wrap!(opts.value_of("width"));
-    let world_height: u32 = value_of_int_wrap!(opts.value_of("height"));
-    let n_quads: usize = value_of_int_wrap!(opts.value_of("n_quads"));
 
-    let mut world = World::new(world_width, world_height, n_quads);
+    let mut world = World::new();
     let pb = ProgressBar::new(0);
 
     // pb.enable_steady_tick(0);
