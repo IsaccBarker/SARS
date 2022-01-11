@@ -26,6 +26,8 @@ impl Species {
         let mut s = Self::new();
 
         s.reference = microbe.genome.clone();
+
+        s
     }
 }
 

@@ -16,6 +16,18 @@ macro_rules! value_of_int_wrap {
 }
 
 fn main() {
+    for _ in 0..100 {
+    println!("{} {} {} {} {}",
+        microbe::grouping::phylum::Phylum::random_phylum_name(),
+        microbe::grouping::class::Class::random_class_name(),
+        microbe::grouping::order::Order::random_order_name(),
+        microbe::grouping::family::Family::random_family_name(),
+        microbe::grouping::genus::Genus::random_genus_name(),
+    );
+    }
+
+    return;
+
     let opts = App::new("SARS")
         .author("Me, me@mail.com")
         .version("1.0.2")
