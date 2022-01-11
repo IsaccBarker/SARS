@@ -11,7 +11,7 @@ use serde::{Serialize, Deserialize};
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
 /// in coce. You can think of it as one anyways.
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Genome {
     pub general_chromosome: Chromosome,
     pub external_chromosome: Chromosome,

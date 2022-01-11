@@ -1,3 +1,4 @@
+pub mod taxonomy;
 pub mod world;
 pub mod microbe;
 pub mod genome;

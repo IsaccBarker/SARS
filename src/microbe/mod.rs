@@ -1,3 +1,5 @@
+pub mod grouping;
+
 use crate::world::World;
 use crate::genome::Genome;
 
