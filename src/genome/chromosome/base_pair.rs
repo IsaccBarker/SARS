@@ -2,7 +2,6 @@ use std::fmt;
 
 use super::nucleobase::Nucleobase;
 
-use rand::rngs::ThreadRng;
 use serde::{Serialize, Deserialize};
 
 /// Self explanitory.
@@ -33,17 +32,17 @@ impl BasePair {
         }
     }
 
-    pub fn random_base_pair(rng: &mut ThreadRng) -> Self {
+    pub fn random_base_pair() -> Self {
         BasePair::from_existing((
-            Nucleobase::random_acid(rng),
-            Nucleobase::random_acid(rng)))
+            Nucleobase::random_acid(),
+            Nucleobase::random_acid()))
     }
 
-    pub fn random_base_pairs(pairs: i32, rng: &mut ThreadRng) -> Vec<BasePair> {
+    pub fn random_base_pairs(pairs: i32) -> Vec<BasePair> {
         let mut ret: Vec<BasePair> = vec![];
 
         for _ in 0..pairs {
-            ret.push(BasePair::random_base_pair(rng));
+            ret.push(BasePair::random_base_pair());
         }
 
         ret

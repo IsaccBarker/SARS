@@ -3,7 +3,6 @@ use crate::genome::Genome;
 
 use std::fmt;
 
-use rand::rngs::ThreadRng;
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -25,9 +24,7 @@ impl Microbe {
     }
 
     pub fn randomize(self: &mut Self, _world: &mut World) -> &mut Self {
-        let mut rng = rand::thread_rng();
-
-        self.randomize_genome(&mut rng);
+        self.randomize_genome();
 
         let _genome = &self.genome;
 
@@ -44,31 +41,23 @@ impl Microbe {
         self
     }
 
-    pub fn mitos(self: &mut Self, rng: &mut ThreadRng) -> Self {
+    pub fn mitos(self: &mut Self) -> Self {
         let mut ret = Microbe::new();
 
 
-        ret.genome = self.genome.mitos(500, rng);
+        ret.genome = self.genome.mitos(500);
 
         ret
     }
 
     pub fn tick(self: &mut Self) {
-        let _rng = rand::thread_rng();
-
-        /* if self.position.x < 0 {
-            self.position.x = 0;
-        }
-
-        if self.position.y < 0 {
-            self.position.y = 0;
-        } */
+        
     }
 }
 
 impl Microbe {
-    fn randomize_genome(self: &mut Self, rng: &mut ThreadRng) {
-        self.genome.randomize(rng);
+    fn randomize_genome(self: &mut Self) {
+        self.genome.randomize();
     }
 }
 

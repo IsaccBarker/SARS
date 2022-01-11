@@ -21,12 +21,14 @@ fn main() {
         .about("Simple Anti-microbial Resistance Simulator. I am aware of the acronym's irony.")
         .arg(Arg::with_name("ticks").short("t").default_value("100000"))
         .arg(Arg::with_name("microbes").short("m").default_value("100000"))
-        .after_help("Longer explanation to appear after the options when \
-                 displaying the help information from --help or -h")
+        .arg(Arg::with_name("basepairs per gene").short("b").default_value("50"))
+        .arg(Arg::with_name("genes per microbe").short("g").default_value("50"))
         .get_matches();
 
     let ticks: i32 = value_of_int_wrap!(opts.value_of("ticks"));
-    let microbes: u32 = value_of_int_wrap!(opts.value_of("microbes"));
+    let microbes: i32 = value_of_int_wrap!(opts.value_of("microbes"));
+    let basepairs: i32 = value_of_int_wrap!(opts.value_of("basepairs per gene"));
+    let genes: i32 = value_of_int_wrap!(opts.value_of("genes per microbe"));
 
     let mut world = World::new();
     let pb = ProgressBar::new(0);
@@ -39,7 +41,7 @@ fn main() {
     pb.println("Creating microbes. This could take a while...");
     pb.println("Please note that this simulator does not cache state to a non-volatile medium. As such, all microbes are stored in memory.");
     pb.println("You may want a computer with a large amount of RAM to run a large scale simulation.");
-    world.populate_microbes(&pb, microbes);
+    world.populate_microbes(&pb, microbes.try_into().unwrap());
 
     pb.reset();
     pb.reset_eta();

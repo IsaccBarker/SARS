@@ -1,7 +1,5 @@
 use std::fmt;
 
-use rand::rngs::ThreadRng;
-use rand::prelude::*;
 use serde::{Serialize, Deserialize};
 
 /// Self explanitory.
@@ -21,13 +19,15 @@ impl fmt::Display for Nucleobase {
 }
 
 impl Nucleobase {
-    pub fn random_acid(rng: &mut ThreadRng) -> Nucleobase {
-        match rng.gen_range(0..4) { // rand 0.8
+    pub fn random_acid() -> Nucleobase {
+        let u = fastrand::usize(0..4);
+
+        match u {
             0 => Nucleobase::A,
             1 => Nucleobase::C,
             2 => Nucleobase::T,
             3 => Nucleobase::G,
-            _ => unreachable!(),
+            _ => unreachable!(),   
         }
     }
 

@@ -7,7 +7,6 @@ use serde::{Serialize, Deserialize};
 #[serde_with::serde_as]
 #[derive(Debug, Serialize, Deserialize)]
 pub struct World {
-    // pub microbes: Vec<Microbe>,
     pub microbes: Vec<Microbe>,
     pub cached_microbes: i32,
 }
@@ -57,6 +56,8 @@ impl World {
         microbes.par_iter_mut().for_each(|microbe| {
             microbe.tick();
         });
+
+        // println!("{}", microbes.get(0).unwrap());
 
         /* let microbes = &mut self.microbes;
 

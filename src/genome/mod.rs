@@ -6,7 +6,6 @@ use chromosome::ChromosomeType;
 
 use std::fmt;
 
-use rand::rngs::ThreadRng;
 use serde::{Serialize, Deserialize};
 
 /// Basically a nucleoid. While I know that prokaryotic organisms
@@ -14,36 +13,34 @@ use serde::{Serialize, Deserialize};
 /// in coce. You can think of it as one anyways.
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Genome {
-    pub resistant_chromosome: Chromosome,
+    pub general_chromosome: Chromosome,
     pub external_chromosome: Chromosome,
 }
 
 impl fmt::Display for Genome {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "\tResistant: {}\n", self.resistant_chromosome)?;
-        write!(f, "\tExternal : {}\n", self.external_chromosome)
+        write!(f, "\tGeneral: {}\n", self.general_chromosome)
     }
 }
 
 impl Genome {
     pub fn new() -> Self {
         Self {
-            resistant_chromosome: Chromosome::new(),
+            general_chromosome: Chromosome::new(),
             external_chromosome: Chromosome::new(),
         }
     }
 
     /// Randomizes the genome (chromosomes)
-    pub fn randomize(self: &mut Self, rng: &mut ThreadRng) {
-        self.resistant_chromosome.randomize(ChromosomeType::Resistant, rng);
-        self.external_chromosome.randomize(ChromosomeType::External, rng);
+    pub fn randomize(self: &mut Self) {
+        self.general_chromosome.randomize(ChromosomeType::General);
     }
 
-    pub fn mitos(self: &mut Self, mutation_chance: i32, rng: &mut ThreadRng) -> Self {
+    pub fn mitos(self: &mut Self, mutation_chance: i32) -> Self {
         let mut ret = Genome::new();
 
-        ret.resistant_chromosome = self.resistant_chromosome.mitos(mutation_chance, rng);
-        ret.external_chromosome = self.external_chromosome.mitos(mutation_chance, rng);
+        ret.general_chromosome = self.general_chromosome.mitos(mutation_chance);
+        ret.external_chromosome = self.external_chromosome.mitos(mutation_chance);
 
         ret
     }
