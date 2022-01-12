@@ -4,11 +4,9 @@ pub mod microbe;
 pub mod genome;
 
 use world::World;
-use crate::microbe::grouping::Group;
 
 use indicatif::{ProgressBar, ProgressStyle};
 use clap::{App, Arg};
-use std::io::Write;
 
 macro_rules! value_of_int_wrap {
     ($v:expr) => {
@@ -30,8 +28,8 @@ fn main() {
 
     let ticks: i32 = value_of_int_wrap!(opts.value_of("ticks"));
     let microbes: i32 = value_of_int_wrap!(opts.value_of("microbes"));
-    let basepairs: i32 = value_of_int_wrap!(opts.value_of("basepairs per gene"));
-    let genes: i32 = value_of_int_wrap!(opts.value_of("genes per microbe"));
+    // let basepairs: i32 = value_of_int_wrap!(opts.value_of("basepairs per gene"));
+    // let genes: i32 = value_of_int_wrap!(opts.value_of("genes per microbe"));
 
     let mut world = World::new();
     let pb = ProgressBar::new(0);
@@ -54,17 +52,11 @@ fn main() {
 
     pb.println("Simulating...");
 
-    // I would much rather have this be parallel, but since
-    // you would need to lock the world and the random
-    // number generator, they would end up executing in
-    // sequence anyways.
     for i in 0..ticks {
         world.tick();
 
         pb.set_position(i.try_into().unwrap());
         pb.set_message(format!("epoch {}/{}", i, ticks));
-
-        // pb.println(format!("{}, {}", world.microbes.get(0).unwrap().position.x, world.microbes.get(0).unwrap().orientation));
     }
 
      pb.finish_with_message("done");

@@ -2,7 +2,7 @@ use std::fmt;
 
 use super::nucleobase::Nucleobase;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Self explanitory.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -33,9 +33,7 @@ impl BasePair {
     }
 
     pub fn random_base_pair() -> Self {
-        BasePair::from_existing((
-            Nucleobase::random_acid(),
-            Nucleobase::random_acid()))
+        BasePair::from_existing((Nucleobase::random_acid(), Nucleobase::random_acid()))
     }
 
     pub fn random_base_pairs(pairs: i32) -> Vec<BasePair> {
@@ -48,4 +46,3 @@ impl BasePair {
         ret
     }
 }
-

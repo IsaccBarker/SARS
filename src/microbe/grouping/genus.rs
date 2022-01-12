@@ -1,8 +1,8 @@
-use crate::taxonomy;
 use super::Group;
+use crate::taxonomy;
 
+use serde::{Deserialize, Serialize};
 use std::any::Any;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Genus {
@@ -10,7 +10,16 @@ pub struct Genus {
     pub designation: String,
 
     /// Species under this genus.
-    pub classes: Vec<usize>,
+    pub children: Vec<usize>,
+}
+
+impl Genus {
+    pub fn new() -> Self {
+        Self {
+            designation: "not designated".to_owned(),
+            children: vec![],
+        }
+    }
 }
 
 impl Group<'_> for Genus {
@@ -23,7 +32,6 @@ impl Group<'_> for Genus {
     }
 
     fn get_standard_children(self: &Self) -> &Vec<usize> {
-        &self.classes
+        &self.children
     }
 }
-

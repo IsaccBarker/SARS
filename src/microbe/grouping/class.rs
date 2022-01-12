@@ -1,8 +1,8 @@
-use crate::taxonomy;
 use super::Group;
+use crate::taxonomy;
 
+use serde::{Deserialize, Serialize};
 use std::any::Any;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Class {
@@ -10,7 +10,16 @@ pub struct Class {
     pub designation: String,
 
     /// Orders under this class.
-    pub classes: Vec<usize>,
+    pub children: Vec<usize>,
+}
+
+impl Class {
+    pub fn new() -> Self {
+        Self {
+            designation: "not designated".to_owned(),
+            children: vec![],
+        }
+    }
 }
 
 impl Group<'_> for Class {
@@ -23,7 +32,6 @@ impl Group<'_> for Class {
     }
 
     fn get_standard_children(self: &Self) -> &Vec<usize> {
-        &self.classes
+        &self.children
     }
 }
-

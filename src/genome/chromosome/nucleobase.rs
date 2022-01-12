@@ -1,6 +1,6 @@
 use std::fmt;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Self explanitory.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -27,7 +27,7 @@ impl Nucleobase {
             1 => Nucleobase::C,
             2 => Nucleobase::T,
             3 => Nucleobase::G,
-            _ => unreachable!(),   
+            _ => unreachable!(),
         }
     }
 

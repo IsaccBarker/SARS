@@ -1,8 +1,7 @@
 use super::Group;
-use crate::taxonomy;
 
+use serde::{Deserialize, Serialize};
 use std::any::Any;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Strain {
@@ -26,4 +25,3 @@ impl Group<'_> for Strain {
         panic!("this is the developers fault.");
     }
 }
-

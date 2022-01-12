@@ -1,19 +1,21 @@
-use crate::genome::chromosome::BasePair;
 use crate::genome::chromosome::nucleobase::Nucleobase;
+use crate::genome::chromosome::BasePair;
 
 use std::collections::BTreeMap;
 use std::fmt;
 use std::iter::repeat_with;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 pub fn random_genes(short_designation: String) -> BTreeMap<String, Gene> {
     let mut genes = BTreeMap::new();
     // let en = Gene::from_existing(BasePair::random_base_pairs(500));
 
     for _ in 0..50 {
-        let name: String = short_designation.to_owned() +
-            &repeat_with(fastrand::alphanumeric).take(6).collect::<String>();
+        let name: String = short_designation.to_owned()
+            + &repeat_with(fastrand::alphanumeric)
+                .take(6)
+                .collect::<String>();
 
         genes.insert(name, Gene::from_existing(BasePair::random_base_pairs(50)));
     }
@@ -46,15 +48,11 @@ impl fmt::Display for Gene {
 
 impl Gene {
     pub fn new() -> Self {
-        Self {
-            pairs: vec![],
-        }
+        Self { pairs: vec![] }
     }
 
     pub fn from_existing(pairs: Vec<BasePair>) -> Self {
-        Self {
-            pairs,
-        }
+        Self { pairs }
     }
 
     /// Makes the gene undergo mitosis. Non-destructive.
@@ -76,8 +74,7 @@ impl Gene {
                 pair.b = Nucleobase::random_acid();
             }
         }
-        
+
         ret
     }
 }
-

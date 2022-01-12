@@ -1,6 +1,6 @@
-pub mod nucleobase;
 pub mod base_pair;
 pub mod gene;
+pub mod nucleobase;
 
 use crate::genome::chromosome::base_pair::BasePair;
 use crate::genome::chromosome::gene::Gene;
@@ -8,7 +8,7 @@ use crate::genome::chromosome::gene::Gene;
 use std::collections::BTreeMap;
 use std::fmt;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// The type of chromosome.
 /// 1. General. Antibiotic resistance outside the cell.
@@ -58,10 +58,10 @@ impl Chromosome {
         let mut ret = Chromosome::new();
 
         for gene in &self.genes {
-            ret.genes.insert(gene.0.to_owned(), gene.1.mitos(mutation_chance));
+            ret.genes
+                .insert(gene.0.to_owned(), gene.1.mitos(mutation_chance));
         }
 
         ret
     }
 }
-

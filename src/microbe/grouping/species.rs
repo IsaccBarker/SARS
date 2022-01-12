@@ -1,10 +1,10 @@
+use super::Group;
 use crate::genome::Genome;
 use crate::microbe::Microbe;
 use crate::taxonomy;
-use super::Group;
 
+use serde::{Deserialize, Serialize};
 use std::any::Any;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Species {
@@ -42,13 +42,19 @@ impl Group<'_> for Species {
     }
 
     fn set_random_standard_name(self: &mut Self) {
-        self.designation = taxonomy::random_base_word().chars().take(2).collect::<String>() +
-            &taxonomy::random_base_word().chars().take(2).collect::<String>() + "-" +
-            &fastrand::i32(0..100).to_string();
+        self.designation = taxonomy::random_base_word()
+            .chars()
+            .take(2)
+            .collect::<String>()
+            + &taxonomy::random_base_word()
+                .chars()
+                .take(2)
+                .collect::<String>()
+            + "-"
+            + &fastrand::i32(0..100).to_string();
     }
 
     fn get_standard_children(self: &Self) -> &Vec<usize> {
         &self.strains
     }
 }
-

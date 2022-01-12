@@ -1,8 +1,8 @@
 use super::Group;
 use crate::taxonomy;
 
+use serde::{Deserialize, Serialize};
 use std::any::Any;
-use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Phylum {
@@ -10,7 +10,16 @@ pub struct Phylum {
     pub designation: String,
 
     /// Classes under this phylum.
-    pub classes: Vec<usize>,
+    pub children: Vec<usize>,
+}
+
+impl Phylum {
+    pub fn new() -> Self {
+        Self {
+            designation: "not designated".to_owned(),
+            children: vec![],
+        }
+    }
 }
 
 impl Group<'_> for Phylum {
@@ -23,7 +32,6 @@ impl Group<'_> for Phylum {
     }
 
     fn get_standard_children(self: &Self) -> &Vec<usize> {
-        &self.classes
+        &self.children
     }
 }
-

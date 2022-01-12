@@ -1,11 +1,11 @@
 pub mod grouping;
 
-use crate::world::World;
 use crate::genome::Genome;
+use crate::world::World;
 
 use std::fmt;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Microbe {
@@ -32,7 +32,7 @@ impl Microbe {
 
         /* let mut speed: i32 = 0;
         let speed_gene = genome.external_chromosome.genes.get_key_value("EG-SPD-A").expect("EG-SPD-A gene not present!").1;
-        
+
         speed += speed_gene.pairs.get(0).unwrap().a.value() as i32;
         speed += (speed_gene.pairs.get(0).unwrap().b.value() * 4) as i32;
         speed += (speed_gene.pairs.get(1).unwrap().a.value() * 8) as i32;
@@ -46,15 +46,12 @@ impl Microbe {
     pub fn mitos(self: &mut Self) -> Self {
         let mut ret = Microbe::new();
 
-
         ret.genome = self.genome.mitos(500);
 
         ret
     }
 
-    pub fn tick(self: &mut Self) {
-        
-    }
+    pub fn tick(self: &mut Self) {}
 }
 
 impl Microbe {
@@ -62,4 +59,3 @@ impl Microbe {
         self.genome.randomize();
     }
 }
-

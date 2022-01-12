@@ -1,12 +1,12 @@
-pub mod ecdna;
 pub mod chromosome;
+pub mod ecdna;
 
 use chromosome::Chromosome;
 use chromosome::ChromosomeType;
 
 use std::fmt;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
@@ -45,4 +45,3 @@ impl Genome {
         ret
     }
 }
-
