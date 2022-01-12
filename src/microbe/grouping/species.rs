@@ -1,7 +1,12 @@
-use super::strain::Strain;
 use crate::genome::Genome;
 use crate::microbe::Microbe;
+use crate::taxonomy;
+use super::Group;
 
+use std::any::Any;
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Species {
     /// The genome that this species is references off of.
     pub reference: Genome,
@@ -10,7 +15,7 @@ pub struct Species {
     pub designation: String,
 
     /// Strains under this species.
-    pub strains: Vec<Strain>,
+    pub strains: Vec<usize>,
 }
 
 impl Species {
@@ -28,6 +33,22 @@ impl Species {
         s.reference = microbe.genome.clone();
 
         s
+    }
+}
+
+impl Group<'_> for Species {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+
+    fn set_random_standard_name(self: &mut Self) {
+        self.designation = taxonomy::random_base_word().chars().take(2).collect::<String>() +
+            &taxonomy::random_base_word().chars().take(2).collect::<String>() + "-" +
+            &fastrand::i32(0..100).to_string();
+    }
+
+    fn get_standard_children(self: &Self) -> &Vec<usize> {
+        &self.strains
     }
 }
 

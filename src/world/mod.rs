@@ -1,4 +1,5 @@
 use crate::microbe::Microbe;
+use crate::microbe::grouping::Group;
 
 use rayon::prelude::*;
 use indicatif::ProgressBar;
@@ -6,17 +7,21 @@ use serde::{Serialize, Deserialize};
 
 #[serde_with::serde_as]
 #[derive(Debug, Serialize, Deserialize)]
-pub struct World {
+pub struct World<'a> {
+    #[serde(with = "serde_traitobject")]
+    pub groups: Vec<Box<dyn Group<'a>>>,
+
     pub microbes: Vec<Microbe>,
     pub cached_microbes: i32,
 }
 
-unsafe impl Send for World {}
-unsafe impl Sync for World {}
+unsafe impl<'a> Send for World<'a> {}
+unsafe impl<'a> Sync for World<'a> {}
 
-impl World {
+impl<'a> World<'a> {
     pub fn new() -> Self {
         Self {
+            groups: vec![],
             microbes: vec![],
             cached_microbes: 0,
         }

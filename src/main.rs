@@ -4,6 +4,7 @@ pub mod microbe;
 pub mod genome;
 
 use world::World;
+use crate::microbe::grouping::Group;
 
 use indicatif::{ProgressBar, ProgressStyle};
 use clap::{App, Arg};
@@ -15,19 +16,8 @@ macro_rules! value_of_int_wrap {
     }
 }
 
+#[allow(unreachable_code)]
 fn main() {
-    for _ in 0..100 {
-    println!("{} {} {} {} {}",
-        microbe::grouping::phylum::Phylum::random_phylum_name(),
-        microbe::grouping::class::Class::random_class_name(),
-        microbe::grouping::order::Order::random_order_name(),
-        microbe::grouping::family::Family::random_family_name(),
-        microbe::grouping::genus::Genus::random_genus_name(),
-    );
-    }
-
-    return;
-
     let opts = App::new("SARS")
         .author("Me, me@mail.com")
         .version("1.0.2")
@@ -76,11 +66,6 @@ fn main() {
 
         // pb.println(format!("{}, {}", world.microbes.get(0).unwrap().position.x, world.microbes.get(0).unwrap().orientation));
     }
-
-     pb.set_message("serializing");
-
-     let mut bc = std::fs::File::create("world.bc").unwrap();
-     bc.write_all(&bincode::serialize(&world).unwrap()).expect("Failed to write serialized bincode world data!");
 
      pb.finish_with_message("done");
 }
