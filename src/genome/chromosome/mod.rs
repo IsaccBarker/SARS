@@ -8,18 +8,16 @@ use crate::genome::chromosome::gene::Gene;
 use std::collections::BTreeMap;
 use std::fmt;
 
-use serde::{Deserialize, Serialize};
-
 /// The type of chromosome.
 /// 1. General. Antibiotic resistance outside the cell.
 /// 3. External. Physical characteristics outside the cell.
-#[derive(Serialize, Deserialize)]
 pub enum ChromosomeType {
     General,
 }
 
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Chromosome {
+    pub in_full: String,
     pub genes: BTreeMap<String, Gene>,
 }
 
@@ -36,6 +34,7 @@ impl fmt::Display for Chromosome {
 impl Chromosome {
     pub fn new() -> Self {
         Self {
+            in_full: String::new(),
             genes: BTreeMap::new(),
         }
     }
@@ -43,8 +42,14 @@ impl Chromosome {
     pub fn randomize(&mut self, for_type: ChromosomeType) {
         self.genes = match for_type {
             ChromosomeType::General => gene::random_genes("".to_owned()),
+        };
+
+        for gene in self.genes {
+            for pair in gene.1.pairs {
+                self.in_full += &(pair.a.to_string() + &pair.b.to_string().to_owned());
+            }
         }
-    }
+    }    
 
     /// Performs mitosis. Takes the current chromosome, and
     /// spits out a version that underwent mitosis. Doesn't

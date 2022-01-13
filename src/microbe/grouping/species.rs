@@ -1,48 +1,23 @@
-use super::Group;
-use crate::genome::Genome;
-use crate::microbe::Microbe;
 use crate::taxonomy;
 
-use serde::{Deserialize, Serialize};
-use std::any::Any;
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug)]
 pub struct Species {
-    /// The genome that this species is references off of.
-    pub reference: Genome,
-
     /// The designation string.
     pub designation: String,
 
-    /// Strains under this species.
-    pub strains: Vec<usize>,
+    pub reference_microbe: Option<usize>,
 }
 
 impl Species {
-    pub fn new() -> Self {
+    pub fn new(reference: Option<usize>) -> Self {
         Self {
-            reference: Genome::new(),
-            designation: "not designated".to_owned(),
-            strains: vec![],
+            designation: Self::get_random_standard_name(),
+            reference_microbe: reference,
         }
     }
 
-    pub fn from_microbe(microbe: &Microbe) -> Self {
-        let mut s = Self::new();
-
-        s.reference = microbe.genome.clone();
-
-        s
-    }
-}
-
-impl Group<'_> for Species {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-
-    fn set_random_standard_name(self: &mut Self) {
-        self.designation = taxonomy::random_base_word()
+    fn get_random_standard_name() -> String {
+        taxonomy::random_base_word()
             .chars()
             .take(2)
             .collect::<String>()
@@ -51,10 +26,7 @@ impl Group<'_> for Species {
                 .take(2)
                 .collect::<String>()
             + "-"
-            + &fastrand::i32(0..100).to_string();
-    }
-
-    fn get_standard_children(self: &Self) -> &Vec<usize> {
-        &self.strains
+            + &fastrand::i32(0..100).to_string()
     }
 }
+

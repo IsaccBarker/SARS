@@ -39,18 +39,26 @@ fn main() {
         .template("{spinner:.red} [{elapsed_precise}, {msg}] [{wide_bar:.green/blue}] ({eta})")
         .progress_chars("#>."));
 
-    pb.println("Creating microbes. This could take a while...");
-    pb.println("Please note that this simulator does not cache state to a non-volatile medium. As such, all microbes are stored in memory.");
+    pb.println("Initializing. This could take a while (linear time complexity)...");
     pb.println("You may want a computer with a large amount of RAM to run a large scale simulation.");
+    pb.set_length(microbes.try_into().unwrap());
     world.populate_microbes(&pb, microbes.try_into().unwrap());
+
+    pb.reset();
+    pb.reset_eta();
+    pb.set_length(microbes.try_into().unwrap());
+
+    pb.println("\nClassifying. This could take a VERY long time (exponential time complexity)...");
+    pb.println("You may want a computer with a lot of paralell processing capability (e.g. 32+ cores) to run a large scale simulation.");
+    world.classify_microbes(&pb);
 
     pb.reset();
     pb.reset_eta();
     pb.set_length(ticks as u64);
 
-    world.tick();
+    pb.println("\nSimulating. This could take a VERY long time (linear time complexity)...");
+    pb.println("You may want a computer with a lot of paralell processing capability (e.g. 32+ cores) to run a large scale simulation.");
 
-    pb.println("Simulating...");
 
     for i in 0..ticks {
         world.tick();

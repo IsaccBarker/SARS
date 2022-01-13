@@ -5,9 +5,7 @@ use crate::world::World;
 
 use std::fmt;
 
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq)]
 pub struct Microbe {
     pub genome: Genome,
 }

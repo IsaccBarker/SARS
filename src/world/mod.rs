@@ -1,4 +1,3 @@
-use crate::microbe::grouping::Group;
 use crate::microbe::Microbe;
 use crate::microbe::grouping::*;
 
@@ -7,44 +6,42 @@ use rayon::prelude::*;
 
 #[serde_with::serde_as]
 #[derive(Debug)]
-pub struct World<'a> {
-    pub groups: Vec<Box<dyn Group<'a>>>,
+pub struct World {
+    pub phylums: Vec<phylum::Phylum>,
+    pub classes: Vec<class::Class>,
+    pub orders: Vec<order::Order>,
+    pub families: Vec<family::Family>,
+    pub species: Vec<species::Species>,
+
     pub microbes: Vec<Microbe>,
     pub cached_microbes: i32,
 }
 
-unsafe impl<'a> Send for World<'a> {}
-unsafe impl<'a> Sync for World<'a> {}
+unsafe impl Send for World {}
+unsafe impl Sync for World {}
 
-impl<'a> World<'a> {
+impl World {
     pub fn new() -> Self {
-        let mut groups: Vec<Box<dyn Group<'a>>> = vec![];
-                                        
-        let mut initial_phylum = Box::new(phylum::Phylum::new());
-        let mut initial_class = Box::new(class::Class::new());
-        let mut initial_order = Box::new(order::Order::new());
-        let mut initial_family = Box::new(family::Family::new());
-        let mut initial_genus = Box::new(genus::Genus::new());
-        let mut initial_species = Box::new(species::Species::new());
+        let mut initial_phylum = phylum::Phylum::new();
+        let mut initial_class = class::Class::new();
+        let mut initial_order = order::Order::new();
+        let mut initial_family = family::Family::new();
+        let mut initial_genus = genus::Genus::new();
+        let mut initial_species = species::Species::new(None);
 
-        // initial_phylum.children.push(1);
-
-        groups.append(&mut vec![
-            initial_phylum,
-            initial_class,
-            initial_order,
-            initial_family,
-            initial_genus,
-            initial_species,
-        ]);
-
-        groups.get_mut(0).unwrap().as_any().downcast_mut::<&mut phylum::Phylum>();
-            // .expect("group[0] isn't a phylum").children.push(1);
-
-        // groups.get_mut(0).unwrap().as_any().downcast_mut::<phylum::Phylum>();
+        initial_phylum.children.push(0);
+        initial_class.children.push(0);
+        initial_order.children.push(0);
+        initial_family.children.push(0);
+        initial_genus.children.push(0);
 
         Self {
-            groups: vec![],
+            phylums: vec![initial_phylum],
+            classes: vec![initial_class],
+            orders: vec![initial_order],
+            families: vec![initial_family],
+            species: vec![initial_species],
+
             microbes: vec![],
             cached_microbes: 0,
         }
@@ -53,8 +50,6 @@ impl<'a> World<'a> {
     pub fn populate_microbes(self: &mut Self, pb: &ProgressBar, count: u32) {
         let mut i: u32 = 0;
         let mut microbes: Vec<Microbe> = vec![];
-
-        pb.set_length(count.into());
 
         // I can't figure out how to bulk allocate this stuff.
         while i < count {
@@ -66,6 +61,29 @@ impl<'a> World<'a> {
         }
 
         self.microbes.append(&mut microbes);
+    }
+
+    pub fn classify_microbes(self: &mut Self, pb: &ProgressBar) {
+        // Take the first microbe and put it in the existing taxonomical structure.
+        let mut initial_species = self.species.get_mut(0).unwrap();
+        let count = self.microbes.len();
+        initial_species.reference_microbe = Some(0); // 0 is the index of the initial microbe.
+
+        pb.inc(1);
+        pb.set_message(format!("classified 1/{}", count));
+
+        // Now classify the rest of the microbes.
+        let i = 1;
+
+        while i < count {
+            let microbe = self.microbes.get(i).unwrap();
+
+            // Compare the genome, from the top down in the taxonmical structure.
+            
+
+            pb.inc(1);
+            pb.set_message(format!("classified {}/{}", i, count))
+        }
     }
 
     fn new_random_microbe(self: &mut Self) -> Microbe {

@@ -12,6 +12,8 @@ Yes, I understand the irony of the name.
 
 [*NIH*: Chapter 3; Classification [of Bacteria]](https://www.ncbi.nlm.nih.gov/books/NBK8406/)
 
+[*Theoretical Computer Science* Two-way string-matching algorithm](https://en.wikipedia.org/wiki/Two-way_string-matching_algorithm)
+
 MLA (or any official citation format) is not used as this is easier for Git (VCS) to parse and handle. This is a list considering biomechanical/biological/bioinformatic theory, not trivial programming language specific problems.
 
 To see libraries used, please see the `Cargo.toml` file.
