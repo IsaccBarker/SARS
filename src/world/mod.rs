@@ -147,7 +147,8 @@ impl World {
                 if metric > max_phylum_metric.0 { max_phylum_metric.1 = i; max_phylum_metric.0 = metric; }
             }
 
-            if (max_phylum_metric < NEW_PHYLUM_THRESHOLD) {}
+            if max_phylum_metric.0 < NEW_PHYLUM_THRESHOLD {}
+
 
             for (i, _) in self.classes.iter().enumerate() {
                 let reference_genome = self.get_class_reference(i);
@@ -156,7 +157,8 @@ impl World {
                 if metric > max_class_metric.0 { max_class_metric.1 = i; max_class_metric.0 = metric; }
             }
 
-            if (max_class_metric < NEW_CLASS_THRESHOLD) {}
+            if max_class_metric.0 < NEW_CLASS_THRESHOLD {}
+
 
             for (i, _) in self.orders.iter().enumerate() {
                 let reference_genome = self.get_order_reference(i);
@@ -165,7 +167,8 @@ impl World {
                 if metric > max_order_metric.0 { max_order_metric.1 = i; max_order_metric.0 = metric; }
             }
 
-            if (max_order_metric < NEW_ORDER_THRESHOLD)
+            if max_order_metric.0 < NEW_ORDER_THRESHOLD {}
+
 
             for (i, _) in self.families.iter().enumerate() {
                 let reference_genome = self.get_family_reference(i);
@@ -174,7 +177,8 @@ impl World {
                 if metric > max_family_metric.0 { max_family_metric.1 = i; max_family_metric.0 = metric; }
             }
 
-            if (max_family_metric < NEW_FAMILY_THRESHOLD)
+            if max_family_metric.0 < NEW_FAMILY_THRESHOLD {}
+
 
             for (i, _) in self.genuses.iter().enumerate() {
                 let reference_genome = self.get_genus_reference(i);
@@ -183,7 +187,8 @@ impl World {
                 if metric > max_genus_metric.0 { max_genus_metric.1 = i; max_genus_metric.0 = metric; }
             }
 
-            if (max_genus_metric < NEW_GENUS_METRIC) {}
+            if max_genus_metric.0 < NEW_GENUS_THRESHOLD {}
+
 
             for (i, _) in self.species.iter().enumerate() {
                 let reference_microbe_index = self.species.get(i).unwrap().reference_microbe.unwrap();
@@ -193,7 +198,8 @@ impl World {
                 if metric > max_species_metric.0 { max_species_metric.1 = i; max_species_metric.0 = metric; }
             }
 
-            if (max_species_metric < NEW_SPECIES_METRIC) {}
+            if max_species_metric.0 < NEW_SPECIES_THRESHOLD {}
+
 
             pb.inc(1);
             pb.set_message(format!("classified {}/{}", i, count))
