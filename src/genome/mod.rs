@@ -5,7 +5,6 @@ use chromosome::Chromosome;
 use chromosome::ChromosomeType;
 
 use std::fmt;
-use memchr::memmem;
 
 /// Basically a nucleoid. While I know that prokaryotic organisms
 /// really only have one chromosome, this makes it easier to represent
@@ -42,16 +41,13 @@ impl Genome {
         ret
     }
 
+    pub fn get_in_full(self: &Self) -> &String {
+        &self.general_chromosome.in_full
+    }
+
     // Gets the string metric betwee two genomes with two-way.
-    pub fn metric(self: &Self, finder: &memmem::Finder) -> f32 {
-        let findings = finder.find_iter(self.general_chromosome.in_full.as_bytes());
-        let needle_size = finder.needle().len();
-        let mut total_character_match = 0;
-
-        for _ in findings {
-            total_character_match += needle_size;
-        }
-
-        (total_character_match - 0) as f32 / (100 - 0) as f32
+    pub fn metric(self: &Self, other: String) -> f64 {
+        // No idea how fast this is...
+        strsim::normalized_damerau_levenshtein(self.get_in_full(), &other)
     }
 }

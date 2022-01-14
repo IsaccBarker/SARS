@@ -44,8 +44,8 @@ impl Chromosome {
             ChromosomeType::General => gene::random_genes("".to_owned()),
         };
 
-        for gene in self.genes {
-            for pair in gene.1.pairs {
+        for gene in &self.genes {
+            for pair in &gene.1.pairs {
                 self.in_full += &(pair.a.to_string() + &pair.b.to_string().to_owned());
             }
         }

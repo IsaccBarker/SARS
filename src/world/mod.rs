@@ -1,5 +1,7 @@
 use crate::microbe::Microbe;
 use crate::microbe::grouping::*;
+use crate::microbe::grouping::threshold::*;
+use crate::genome::Genome;
 
 use indicatif::ProgressBar;
 use rayon::prelude::*;
@@ -11,6 +13,7 @@ pub struct World {
     pub classes: Vec<class::Class>,
     pub orders: Vec<order::Order>,
     pub families: Vec<family::Family>,
+    pub genuses: Vec<genus::Genus>,
     pub species: Vec<species::Species>,
 
     pub microbes: Vec<Microbe>,
@@ -27,7 +30,7 @@ impl World {
         let mut initial_order = order::Order::new();
         let mut initial_family = family::Family::new();
         let mut initial_genus = genus::Genus::new();
-        let mut initial_species = species::Species::new(None);
+        let initial_species = species::Species::new(None);
 
         initial_phylum.children.push(0);
         initial_class.children.push(0);
@@ -40,12 +43,63 @@ impl World {
             classes: vec![initial_class],
             orders: vec![initial_order],
             families: vec![initial_family],
+            genuses: vec![initial_genus],
             species: vec![initial_species],
 
             microbes: vec![],
             cached_microbes: 0,
         }
     }
+
+
+    fn get_phylum_reference(self: &Self, i: usize) -> &Genome {
+        self.get_class_reference(*self.phylums.get(i).unwrap().children.get(0).unwrap())
+    }
+
+    fn get_class_reference(self: &Self, i: usize) -> &Genome {
+        self.get_order_reference(*self.classes.get(i).unwrap().children.get(0).unwrap())
+    }
+
+    fn get_order_reference(self: &Self, i: usize) -> &Genome {
+        self.get_family_reference(*self.families.get(i).unwrap().children.get(0).unwrap())
+    }
+
+    fn get_family_reference(self: &Self, i: usize) -> &Genome {
+        self.get_genus_reference(*self.genuses.get(i).unwrap().children.get(0).unwrap())
+    }
+
+    fn get_genus_reference(self: &Self, i: usize) -> &Genome {
+        let microbe_index = self.species.get(i).unwrap().reference_microbe.unwrap();
+
+        &self.microbes.get(microbe_index).unwrap().genome
+    }
+
+
+    fn new_from_phylum(self: &mut Self) -> usize {
+        self.phylums.push(phylum::Phylum::new());
+        self.phylums.len() - 1
+    }
+
+    fn new_from_class(self: &mut Self) -> usize {
+        self.classes.push(class::Class::new());
+        self.classes.len() - 1
+    }
+
+    fn new_from_order(self: &mut Self) -> usize {
+        self.orders.push(order::Order::new());
+        self.orders.len() - 1
+    }
+
+    fn new_from_family(self: &mut Self) -> usize {
+        self.families.push(family::Family::new());
+        self.families.len() - 1
+    }
+
+    fn new_from_genus(self: &mut Self) -> usize {
+        self.genuses.push(genus::Genus::new());
+        self.genuses.len() - 1
+    }
+
 
     pub fn populate_microbes(self: &mut Self, pb: &ProgressBar, count: u32) {
         let mut i: u32 = 0;
@@ -77,9 +131,69 @@ impl World {
 
         while i < count {
             let microbe = self.microbes.get(i).unwrap();
+            let genome_in_full = microbe.genome.get_in_full();
+            let mut max_phylum_metric = (0.0, 0);
+            let mut max_class_metric = (0.0, 0);
+            let mut max_order_metric = (0.0, 0);
+            let mut max_family_metric = (0.0, 0);
+            let mut max_genus_metric = (0.0, 0);
+            let mut max_species_metric = (0.0, 0);
 
             // Compare the genome, from the top down in the taxonmical structure.
+            for (i, _) in self.phylums.iter().enumerate() {
+                let reference_genome = self.get_phylum_reference(i);
+                let metric = reference_genome.metric(genome_in_full.to_owned());
+
+                if metric > max_phylum_metric.0 { max_phylum_metric.1 = i; max_phylum_metric.0 = metric; }
+            }
+
+            if (max_phylum_metric < NEW_PHYLUM_THRESHOLD) {}
+
+            for (i, _) in self.classes.iter().enumerate() {
+                let reference_genome = self.get_class_reference(i);
+                let metric = reference_genome.metric(genome_in_full.to_owned());
             
+                if metric > max_class_metric.0 { max_class_metric.1 = i; max_class_metric.0 = metric; }
+            }
+
+            if (max_class_metric < NEW_CLASS_THRESHOLD) {}
+
+            for (i, _) in self.orders.iter().enumerate() {
+                let reference_genome = self.get_order_reference(i);
+                let metric = reference_genome.metric(genome_in_full.to_owned());
+            
+                if metric > max_order_metric.0 { max_order_metric.1 = i; max_order_metric.0 = metric; }
+            }
+
+            if (max_order_metric < NEW_ORDER_THRESHOLD)
+
+            for (i, _) in self.families.iter().enumerate() {
+                let reference_genome = self.get_family_reference(i);
+                let metric = reference_genome.metric(genome_in_full.to_owned());
+            
+                if metric > max_family_metric.0 { max_family_metric.1 = i; max_family_metric.0 = metric; }
+            }
+
+            if (max_family_metric < NEW_FAMILY_THRESHOLD)
+
+            for (i, _) in self.genuses.iter().enumerate() {
+                let reference_genome = self.get_genus_reference(i);
+                let metric = reference_genome.metric(genome_in_full.to_owned());
+            
+                if metric > max_genus_metric.0 { max_genus_metric.1 = i; max_genus_metric.0 = metric; }
+            }
+
+            if (max_genus_metric < NEW_GENUS_METRIC) {}
+
+            for (i, _) in self.species.iter().enumerate() {
+                let reference_microbe_index = self.species.get(i).unwrap().reference_microbe.unwrap();
+                let reference_genome = &self.microbes.get(reference_microbe_index).unwrap().genome;
+                let metric = reference_genome.metric(genome_in_full.to_owned());
+            
+                if metric > max_species_metric.0 { max_species_metric.1 = i; max_species_metric.0 = metric; }
+            }
+
+            if (max_species_metric < NEW_SPECIES_METRIC) {}
 
             pb.inc(1);
             pb.set_message(format!("classified {}/{}", i, count))
